@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+
+
 def build_driver():
     opts = Options()
     opts.add_argument("--disable-notifications")
@@ -17,26 +19,25 @@ def build_driver():
     )
     return driver
 
+
 @pytest.fixture(scope="session")
 def driver():
     drv = build_driver()
     yield drv
     drv.quit()
+
+
 @pytest.fixture(scope="session")
 def credentials():
     return {
         "user": os.getenv("TEST_USER"),
-        "pwd":  os.getenv("TEST_PWD"),
+        "pwd": os.getenv("TEST_PWD"),
         "auth_name": os.getenv("TEST_AUTH")
     }
+
+
 @pytest.fixture(scope="session")
 def logged_driver(driver, credentials):
     from pages.login_page import LoginPage
     LoginPage(driver).login(**credentials)
     return driver
-
-@pytest.fixture(scope="session")
-def auth_driver(logged_driver):
-    from pages.auth_strategies import TransitionToAuth
-    TransitionToAuth(logged_driver).windAuth()
-    return logged_driver
