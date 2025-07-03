@@ -11,9 +11,7 @@ import pytest
 )
 def test_user_can_create(logged_driver, name, comment, auth_type):
     page = AuthStrategiesPage(logged_driver)
-    modal = page.create_modal()
-    modal.fill(name=name, comment=comment, auth_type=auth_type)
-    modal.submit()
+    page.create_modal(name=name, comment=comment, auth_type=auth_type)
     assert page.has_strategy(name, comment), "Запись не появилась в таблице"
 
 
@@ -29,12 +27,10 @@ def test_user_can_create(logged_driver, name, comment, auth_type):
 )
 def test_alert_create(logged_driver, name, comment, auth_type):
     page = AuthStrategiesPage(logged_driver)
-    modal = page.create_modal()
-    modal.fill(name=name, comment=comment, auth_type=auth_type)
-    modal.submit(expect_success=False)
-    err_in_modal = modal.is_open()
+    page.create_modal(name=name, comment=comment, auth_type=auth_type,expect_success=False)
+    err_in_modal = page.is_open()
     if page.has_strategy(name, comment, timeout=2):
-        delete_modal = page.delete_modal(name=name, comment=comment)
-        delete_modal.delete()
+        page.delete_modal(name=name, comment=comment)
+        # delete_modal.delete()
         page.wait_strategy_disappears(name, comment)
     assert err_in_modal, "Элемент был создан и не выдал ошибки"

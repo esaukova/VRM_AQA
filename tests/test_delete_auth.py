@@ -11,7 +11,6 @@ from pages.auth_strategies_page import AuthStrategiesPage
 )
 def test_user_can_delete(logged_driver, name, comment, auth_type):
     page = AuthStrategiesPage(logged_driver)
-    delete_modal = page.delete_modal(name=name, comment=comment)
-    delete_modal.delete()
+    page.delete_modal(name=name, comment=comment)
     page.wait_strategy_disappears(name, comment)
     assert not page.has_strategy(name, comment), "Запись все еще в таблице в таблице"

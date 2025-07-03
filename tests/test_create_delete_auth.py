@@ -11,9 +11,6 @@ import pytest
 )
 def test_user_create_delete(logged_driver, name, comment, auth_type):
     page = AuthStrategiesPage(logged_driver)
-    create_modal = page.create_modal()
-    create_modal.fill(name=name, comment=comment, auth_type=auth_type)
-    create_modal.submit()
-    delete_modal = page.delete_modal(name=name, comment=comment)
-    delete_modal.delete()
+    page.create_modal(name=name, comment=comment, auth_type=auth_type)
+    page.delete_modal(name=name, comment=comment)
     page.wait_strategy_disappears(name, comment)
