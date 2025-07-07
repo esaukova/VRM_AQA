@@ -31,6 +31,5 @@ def test_alert_create(logged_driver, name, comment, auth_type):
     err_in_modal = page.is_open()
     if page.has_strategy(name, comment, timeout=2):
         page.delete_modal(name=name, comment=comment)
-        # delete_modal.delete()
         page.wait_strategy_disappears(name, comment)
     assert err_in_modal, "Элемент был создан и не выдал ошибки"
