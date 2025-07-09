@@ -35,18 +35,18 @@ class ResolutionsPage:
         """Удаляет все разрешения со страницы, пока они не закончатся."""
         while True:
             try:
-                # Проверяем, есть ли хоть одна строка, с коротким ожиданием
+
                 WebDriverWait(self.driver, 2).until(EC.presence_of_element_located(self._ALL_ROWS))
-                # Кликаем на первый чекбокс
+
                 self.wait.until(EC.element_to_be_clickable(self._FIRST_ROW_CHECKBOX)).click()
-                # Нажимаем основную кнопку 'Удалить'
+   
                 self.wait.until(EC.element_to_be_clickable(self._MAIN_DELETE_BTN)).click()
-                # В окне подтверждения нажимаем 'Удалить'
+
                 self.wait.until(EC.element_to_be_clickable(self._CONFIRM_DELETE_BTN)).click()
-                # Ждем немного, чтобы таблица успела обновиться
+ 
                 time.sleep(1)
             except TimeoutException:
-                # Если строк больше нет, выходим из цикла
+
                 break
     def has_resolution_in_table(self, name: str) -> bool:
         try:
@@ -56,10 +56,10 @@ class ResolutionsPage:
         except TimeoutException:
             return False
 
-    # Расположен внутри класса ResolutionsPage в файле pages/resolutions_page.py
+
 
     class CreateResolutionModal:
-        # ... (остальные локаторы остаются без изменений)
+
         _NAME_INPUT = (By.CSS_SELECTOR, "[data-cy='name'] input")
         _PORT_INPUT = (By.CSS_SELECTOR, "[data-cy='port'] input")
         _LOGIN_INPUT = (By.CSS_SELECTOR, "[data-cy='login'] input")
@@ -67,7 +67,7 @@ class ResolutionsPage:
         _WIDTH_INPUT = (By.CSS_SELECTOR, "[data-cy='width'] input")
         _HEIGHT_INPUT = (By.CSS_SELECTOR, "[data-cy='height'] input")
         _MODAL_ROOT = (By.CSS_SELECTOR, "div[data-testid='form-drawer']")
-        # ИСПРАВЛЕНО: Правильный локатор для кнопки 'Закрыть' (крестик)
+        
         _CLOSE_BTN = (By.CSS_SELECTOR, "button[aria-label='Закрыть']")
         _ERROR_MESSAGE = (By.CSS_SELECTOR, "p.Mui-error")
         _SUBMIT_BTN = (By.CSS_SELECTOR, "[data-testid='form-drawer-submit']")
@@ -77,7 +77,7 @@ class ResolutionsPage:
             self.driver = driver
             self.wait = wait
 
-        # Метод fill_form остается без изменений
+
         def fill_form(self, name=None, port=None, login=None, password=None, width=None, height=None):
             if name is not None:
                 field = self.wait.until(EC.visibility_of_element_located(self._NAME_INPUT))
@@ -108,14 +108,14 @@ class ResolutionsPage:
             self.wait.until(EC.element_to_be_clickable(self._SUBMIT_BTN)).click()
 
         def get_error_text(self) -> str:
-            # Этот метод нам больше не нужен для теста с пустым именем, но пусть останется для других проверок
+            
             try:
                 error_wait = WebDriverWait(self.driver, 3)
                 return error_wait.until(EC.visibility_of_element_located(self._ERROR_MESSAGE)).text
             except TimeoutException:
                 return ""
         
-        # ДОБАВЛЕНО: Новый метод для проверки состояния кнопки
+        
         def is_submit_button_enabled(self) -> bool:
             """Проверяет, активна ли кнопка 'Создать'."""
             submit_button = self.wait.until(EC.presence_of_element_located(self._SUBMIT_BTN))
